@@ -2,8 +2,8 @@
 # vi: set ft=ruby :
 #
 
-NODES = 10
-DISKS = 48
+NODES = 12
+DISKS = 24
 
 Vagrant.configure("2") do |config|
     config.vm.box = "chef/centos-7.1"
