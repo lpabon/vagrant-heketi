@@ -3,7 +3,7 @@
 #
 
 NODES = 4
-DISKS = 12
+DISKS = 8
 
 Vagrant.configure("2") do |config|
     config.ssh.insert_key = false
@@ -40,7 +40,7 @@ Vagrant.configure("2") do |config|
                 driverletters = ('b'..'z').to_a
                 storage.vm.provider :libvirt do  |lv|
                     lv.storage :file, :device => "vd#{driverletters[d]}", :path => "disk-#{i}-#{d}.disk", :size => '500G'
-                    lv.memory = 1024
+                    lv.memory = 2048
                     lv.cpus =2
                 end
             end

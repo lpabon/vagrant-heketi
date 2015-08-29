@@ -1,3 +1,7 @@
 #!/bin/sh
 
-vagrant up && vagrant halt && vagrant up
+vagrant up --provider=libvirt 
+vagrant provision
+vagrant halt
+vagrant up --provider=libvirt
+vagrant provision
