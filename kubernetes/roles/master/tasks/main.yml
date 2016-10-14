@@ -1,0 +1,23 @@
+- name: setup etcd
+  copy: src=etcd.conf owner=root group=root dest=/etc/etcd
+
+- name: copy kube configuration
+  copy: src={{ item }} owner=root group=root dest=/etc/kubernetes mode=644
+  with_items:
+    - config
+    - apiserver
+    - kubelet
+
+- name: copy flanneld configuration
+  copy: src=flanneld-conf.json dest=/home/vagrant owner=vagrant group=vagrant
+
+- name: enable kube services
+  service: name={{ item }} state=started enabled=yes
+  with_items:
+    - etcd
+    - kube-apiserver
+    - kube-controller-manager
+    - kube-scheduler
+
+- name: setup flannel config in etcd
+  command: chdir=/home/vagrant curl -L http://localhost:2379/v2/keys/atomic01/network/config -XPUT --data-urlencode value@flanneld-conf.json 

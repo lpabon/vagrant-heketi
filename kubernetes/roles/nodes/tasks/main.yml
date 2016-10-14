@@ -1,0 +1,29 @@
+- name: setup flanneld
+  copy: src=flanneld owner=root group=root dest=/etc/sysconfig/flanneld
+
+- name: make docker service directory
+  file: path=/etc/systemd/system/docker.service.d state=directory
+
+- name: copy systemd flanneld file
+  copy: src=10-flanneld-network.conf owner=root group=root dest=/etc/systemd/system/docker.service.d
+
+- name: setup kubelet
+  template:
+    src: kubelet.j2
+    dest: /etc/kubernetes/kubelet
+    owner: root
+    group: root
+    mode: 0644
+
+- name: set master location
+  copy: src=config owner=root group=root dest=/etc/kubernetes/config
+
+- name: restart systemd
+  command: systemctl daemon-reload
+
+- name: enable kube services
+  service: name={{ item }} state=started enabled=yes
+  with_items:
+    - flanneld
+    - kubelet
+    - kube-proxy

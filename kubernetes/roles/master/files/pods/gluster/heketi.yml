@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: heketi
+spec:
+  nodeSelector:
+    name: worker-103
+  containers:
+    - name: heketi
+      image: lpabon/aplo-heketi
+      ports:
+        - containerPort: 8080
+          hostPort: 8080
